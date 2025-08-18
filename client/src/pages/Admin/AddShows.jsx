@@ -4,12 +4,13 @@ import Loading from '../../components/Loading';
 import Title from '../../components/admin/Title';
 import { CheckIcon, DeleteIcon, StarIcon } from 'lucide-react';
 import { kConverter } from '../../lib/kConverter';
-// import { useAppContext } from '../../context/AppContext'; 
+import { useAppContext } from '../../context/AppContext'; 
 import toast from 'react-hot-toast';
 
 const AddShows = () => {
 
     // const {axios, getToken, user, image_base_url} = useAppContext()
+    const {axios, getToken, user} = useAppContext()
 
     const currency = import.meta.env.VITE_CURRENCY
     const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
@@ -21,16 +22,16 @@ const AddShows = () => {
 
 
      const fetchNowPlayingMovies = async () => {
-        // try {
-        //     const { data } = await axios.get('/api/show/now-playing', {
-        //         headers: { Authorization: `Bearer ${await getToken()}` }})
-        //         if(data.success){
-        //             setNowPlayingMovies(data.movies)
-        //         }
-        // } catch (error) {
-        //     console.error('Error fetching movies:', error)
-        // }
-        setNowPlayingMovies(dummyShowsData)
+        try {
+            const { data } = await axios.get('/api/show/now-playing', {
+                headers: { Authorization: `Bearer ${await getToken()}` }})
+                if(data.success){
+                    setNowPlayingMovies(data.movies)
+                }
+        } catch (error) {
+            console.error('Error fetching movies:', error)
+        }
+        // setNowPlayingMovies(dummyShowsData)
     };
 
     useEffect(() => { 
