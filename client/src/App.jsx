@@ -15,6 +15,7 @@ import ListShows from './pages/Admin/ListShows'
 import ListBookings from './pages/Admin/ListBookings'
 import { useAppContext } from './context/AppContext'
 import { SignIn } from '@clerk/clerk-react'
+import Loading from './components/Loading'
 
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
         <Route path='/movies/:id' element={<MovieDetails/>}/>
         <Route path='/movies/:id/:date' element={<SeatLayout/>}/>
         <Route path='/my-bookings' element={<MyBookings/>}/>
+        <Route path='/loading/:newUrl' element={<Loading/>}/>
         <Route path='/favorite' element={<Favorite/>}/>
 
         <Route path='/admin/*' element={user ? <Layout/> : (
