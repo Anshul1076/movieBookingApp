@@ -2,7 +2,8 @@ import { inngest } from "../inngest/index.js";
 import Booking from "../models/Booking.js";
 import Show from "../models/Show.js"
 import stripe from 'stripe'
-
+import User from "../models/User.js";  // ✅ import User model
+import { users } from "@clerk/clerk-sdk-node"; // make sure you installed clerk-sdk-node
 
 // Function to check availability of selected seats for a movie
 const checkSeatsAvailability = async (showId, selectedSeats)=>{
@@ -26,6 +27,27 @@ export const createBooking = async (req, res)=>{
         const {userId} = req.auth();
         const {showId, selectedSeats} = req.body;
         const { origin } = req.headers;
+
+
+     // ✅ Ensure user exists in MongoDB, or create it
+let user = await User.findById(userId);
+if (!user) {
+  // fetch from Clerk API
+  const clerkUser = await users.getUser(userId);
+
+  // build full name safely
+  const fullName =
+    clerkUser.fullName ||
+    `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim();
+
+  user = await User.create({
+    _id: userId,
+    name: fullName || "Unknown User", // fallback if Clerk doesn’t return name
+    email: clerkUser.emailAddresses?.[0]?.emailAddress || "no-email@unknown.com",
+    image: clerkUser.imageUrl || "",
+  });
+}
+
 
         // Check if the seat is available for the selected show
         const isAvailable = await checkSeatsAvailability(showId, selectedSeats)
