@@ -28,7 +28,6 @@ const MyBookings = () => {
       console.log(error)
     }
     setIsLoading(false)
-    // setBookings(dummyBookingData)
     setIsLoading(false)
 
   }
